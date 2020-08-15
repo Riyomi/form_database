@@ -107,11 +107,21 @@ class _PageFormState extends State<PageForm> {
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
                         print('$_user:$_password:$_passwordRepeat');
+
+                        try {
+                          insertUser(new User(_user, _password));
+                        } on Exception catch (_) {
+                          Scaffold.of(context)
+                              .showSnackBar(SnackBar(
+                            backgroundColor: Colors.redAccent,
+                            content: Text('A user with this name already exists.'),));
+                        }
+
                         Scaffold.of(context)
                             .showSnackBar(SnackBar(
                           backgroundColor: Colors.green,
                           content: Text('Successfully submitted'),));
-                        insertUser(new User(_user, _password));
+
                       } else {
                         Scaffold.of(context)
                             .showSnackBar(SnackBar(

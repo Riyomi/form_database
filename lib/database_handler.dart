@@ -28,8 +28,8 @@ final Future<Database> database = getDatabasesPath().then((String path) {
     onCreate: (db, version) {
 
       return db.execute(
-          "CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-              "username TEXT, password TEXT");
+          "CREATE TABLE users(username TEXT PRIMARY KEY NOT NULL, password TEXT)",
+      );
     },
     version: 1,
   );
