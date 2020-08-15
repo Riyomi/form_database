@@ -39,10 +39,13 @@ final Future<Database> database = getDatabasesPath().then((String path) {
 Future<void> insertUser(User user) async {
   final Database db = await database;
 
-
-  await db.insert(
+  var raw = await db.insert(
       'users',
       user.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      conflictAlgorithm: ConflictAlgorithm.fail, // ConflictAlgorithm.replace
   );
+
+  if (raw.toString() == "") {
+    return Future.error('Error from return');
+  }
 }
