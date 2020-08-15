@@ -4,15 +4,15 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class User {
-  final int id;
+ // final int id;
   final String username;
   final String password;
 
-  User({this.id, this.username, this.password});
+  User(this.username, this.password);
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+   //   'id': id,
       'username': username,
       'password': password,
     };
@@ -26,7 +26,10 @@ final Future<Database> database = getDatabasesPath().then((String path) {
   return openDatabase(
     join(path, _databaseName),
     onCreate: (db, version) {
-      return db.execute("CREATE TABLE users(id INTEGER PRIMARY KEY, username TEXT, password TEXT");
+
+      return db.execute(
+          "CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+              "username TEXT, password TEXT");
     },
     version: 1,
   );
@@ -43,9 +46,3 @@ Future<void> insertUser(User user) async {
       conflictAlgorithm: ConflictAlgorithm.replace,
   );
 }
-
-final admin = User(
-  id: 0,
-  username: 'admin',
-  password: 'admin',
-);

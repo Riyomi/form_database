@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:db_practice/database_handler.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -110,6 +111,7 @@ class _PageFormState extends State<PageForm> {
                             .showSnackBar(SnackBar(
                           backgroundColor: Colors.green,
                           content: Text('Successfully submitted'),));
+                        insertUser(new User(_user, _password));
                       } else {
                         Scaffold.of(context)
                             .showSnackBar(SnackBar(
