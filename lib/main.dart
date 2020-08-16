@@ -37,7 +37,7 @@ class _PageFormState extends State<PageForm> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              SizedBox(height: 20), //
+              SizedBox(height: 20),
               FlutterLogo(size: 100),
               SizedBox(height: 20),
               Text('Sign up',
@@ -62,7 +62,7 @@ class _PageFormState extends State<PageForm> {
                     return null;
                   }
               ),
-              SizedBox(height: 20), // for extra place between the two widgets
+              SizedBox(height: 20),
               TextFormField(
                 obscureText: true,
                 decoration: InputDecoration(
@@ -79,7 +79,7 @@ class _PageFormState extends State<PageForm> {
                   return null;
                 },
               ),
-              SizedBox(height: 20), //
+              SizedBox(height: 20),
               TextFormField(
                 obscureText: true,
                 decoration: InputDecoration(
@@ -96,7 +96,7 @@ class _PageFormState extends State<PageForm> {
                   return null;
                 },
               ),
-              SizedBox(height: 20), // f
+              SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: FlatButton(
@@ -132,7 +132,7 @@ class _PageFormState extends State<PageForm> {
                       }
                     }
                 ),
-              ),// or extra place between the two widgets
+              ),
             ],
           )
       )
