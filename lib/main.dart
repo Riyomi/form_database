@@ -113,13 +113,15 @@ class _PageFormState extends State<PageForm> {
                           Scaffold.of(context)
                               .showSnackBar(SnackBar(
                             backgroundColor: Colors.green,
-                            content: Text('Successfully submitted'),));
+                            content: Text(
+                                'Successfully submitted'),));
                         } on DatabaseException catch (_) {
                           print("Error");
                           Scaffold.of(context)
                               .showSnackBar(SnackBar(
-                          backgroundColor: Colors.redAccent,
-                          content: Text('A user with this name already exists.'),));
+                            backgroundColor: Colors.redAccent,
+                            content: Text(
+                                'A user with this name already exists.'),));
                         }
                       } else {
                         Scaffold.of(context)
@@ -138,6 +140,5 @@ class _PageFormState extends State<PageForm> {
       )
       ],),
     );
-
   }
 }

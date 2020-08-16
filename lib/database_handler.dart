@@ -23,9 +23,8 @@ final Future<Database> database = getDatabasesPath().then((String path) {
   return openDatabase(
     join(path, _databaseName),
     onCreate: (db, version) {
-
       return db.execute(
-          "CREATE TABLE users(username TEXT PRIMARY KEY NOT NULL, password TEXT)",
+        "CREATE TABLE users(username TEXT PRIMARY KEY NOT NULL, password TEXT)",
       );
     },
     version: 1,
