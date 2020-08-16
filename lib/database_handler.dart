@@ -12,7 +12,6 @@ class User {
 
   Map<String, dynamic> toMap() {
     return {
-   //   'id': id,
       'username': username,
       'password': password,
     };
@@ -39,13 +38,9 @@ final Future<Database> database = getDatabasesPath().then((String path) {
 Future<void> insertUser(User user) async {
   final Database db = await database;
 
-  var raw = await db.insert(
+  await db.insert(
       'users',
       user.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.fail, // ConflictAlgorithm.replace
+      conflictAlgorithm: ConflictAlgorithm.fail,
   );
-
-  if (raw.toString() == "") {
-    return Future.error('Error from return');
-  }
 }

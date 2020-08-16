@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:db_practice/database_handler.dart';
+import 'package:sqflite/sqflite.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -104,19 +105,21 @@ class _PageFormState extends State<PageForm> {
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     )),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         print('$_user:$_password:$_passwordRepeat');
-                        if (insertUser(new User(_user, _password)) == null) {
-                          Scaffold.of(context)
-                              .showSnackBar(SnackBar(
-                            backgroundColor: Colors.redAccent,
-                            content: Text('A user with this name already exists.'),));
-                        } else {
+                        try {
+                          await insertUser(new User(_user, _password));
                           Scaffold.of(context)
                               .showSnackBar(SnackBar(
                             backgroundColor: Colors.green,
                             content: Text('Successfully submitted'),));
+                        } on DatabaseException catch (_) {
+                          print("Error");
+                          Scaffold.of(context)
+                              .showSnackBar(SnackBar(
+                          backgroundColor: Colors.redAccent,
+                          content: Text('A user with this name already exists.'),));
                         }
                       } else {
                         Scaffold.of(context)
