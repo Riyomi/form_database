@@ -75,6 +75,8 @@ class _PageFormState extends State<PageForm> {
                 validator: (value) {
                   if(value.isEmpty) {
                     return 'Please enter your password';
+                  } else if (!validateStructure(value)) {
+                    return 'Your password is too weak';
                   }
                   return null;
                 },
@@ -141,4 +143,11 @@ class _PageFormState extends State<PageForm> {
       ],),
     );
   }
+}
+
+bool validateStructure(String value){
+  String  pattern =
+      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+  RegExp regExp = new RegExp(pattern);
+  return regExp.hasMatch(value);
 }
