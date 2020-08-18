@@ -158,7 +158,9 @@ class _PageFormState extends State<PageForm> {
                     color: Colors.black,
                     decoration: TextDecoration.underline,
                   )),
-                onTap: () => {}
+                onTap: () => {
+                  //TODO: add function that would redirect to the login page
+                }
             ),
           ],
         ),
