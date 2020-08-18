@@ -139,7 +139,29 @@ class _PageFormState extends State<PageForm> {
               ),
             ],
           )
-      )
+      ),
+        SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('Already a member? ',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                )),
+            InkWell(
+              child: Text('Log in.',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    decoration: TextDecoration.underline,
+                  )),
+                onTap: () => {}
+            ),
+          ],
+        ),
       ],),
     );
   }
