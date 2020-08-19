@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:db_practice/database_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
-
-final prefs = SharedPreferences.getInstance();
+import 'shared_preferences_util.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -201,6 +200,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    StorageUtil.putString('username', 'treszt');
+
     return SingleChildScrollView(
       child: Column(children: <Widget>[
         Form (
@@ -270,6 +271,7 @@ class _LoginPageState extends State<LoginPage> {
                               content: Text('Succesfully logged in.'),));
                             setState(() {
                               _autoValidate = true;
+                              StorageUtil.putString('username', _user);
                             });
                           } else {
                             Scaffold.of(context)
@@ -309,6 +311,7 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.pop(context)
                 }
             ),
+            Text(StorageUtil.getString('username')),
           ],
         ),
       ],),
