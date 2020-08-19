@@ -41,3 +41,39 @@ Future<void> insertUser(User user) async {
       conflictAlgorithm: ConflictAlgorithm.fail,
   );
 }
+
+Future<void> updateUser(User user) async {
+  final db = await database;
+
+  await db.update(
+    'users',
+    user.toMap(),
+    where: "username = ?",
+    whereArgs: [user.username], // used to safeguard against SQL injection
+  );
+}
+
+Future<void> deleteUser(String username) async {
+  final db = await database;
+
+  await db.delete(
+    'users',
+    where: "username = ?",
+    whereArgs: [username],
+  );
+}
+
+Future<List<User>> users() async {
+  final Database db = await database;
+
+  final List<Map<String, dynamic>> maps = await db.query('users');
+
+  return List.generate(maps.length, (i) {
+    return User(
+      maps[i]['username'],
+      maps[i]['password'],
+    );
+  });
+}
+
+
