@@ -76,4 +76,15 @@ Future<List<User>> users() async {
   });
 }
 
+Future<bool> getUser(String username, String password) async {
+  final db = await database;
+
+  var res = await db.query('users',
+    where: "username = ? AND password = ?",
+    whereArgs: [username, password],
+  );
+
+  return res.isNotEmpty ? true : false ;
+
+}
 

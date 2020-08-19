@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:db_practice/database_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+
+final prefs = SharedPreferences.getInstance();
 
 void main() {
   runApp(MaterialApp(
@@ -22,7 +25,6 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
-
   var _autoValidate = false;
   var _user;
   var _password;
@@ -260,29 +262,24 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           print('$_user:$_password');
-                          try {
-                            await insertUser(new User(_user, _password));
+                          bool found = await getUser('$_user', '$_password');
+                          if (found) {
                             Scaffold.of(context)
                                 .showSnackBar(SnackBar(
                               backgroundColor: Colors.green,
-                              content: Text(
-                                  'Successfully submitted'),));
-                          } on DatabaseException catch (_) {
-                            print("Error");
+                              content: Text('Succesfully logged in.'),));
+                            setState(() {
+                              _autoValidate = true;
+                            });
+                          } else {
                             Scaffold.of(context)
                                 .showSnackBar(SnackBar(
                               backgroundColor: Colors.redAccent,
-                              content: Text(
-                                  'A user with this name already exists.'),));
+                              content: Text('Username and password don\'t match.'),));
+                            setState(() {
+                              _autoValidate = true;
+                            });
                           }
-                        } else {
-                          Scaffold.of(context)
-                              .showSnackBar(SnackBar(
-                            backgroundColor: Colors.redAccent,
-                            content: Text('Problem submitting form'),));
-                          setState(() {
-                            _autoValidate = true;
-                          });
                         }
                       }
                   ),
