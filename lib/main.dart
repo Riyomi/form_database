@@ -1,17 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:db_practice/database_handler.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
-import 'shared_preferences_util.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  //SharedPreferences prefs = await SharedPreferences.getInstance();
+ // var user = prefs.getString('username') ?? false;
+ // print(user);
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: SignUpPage()
+        child: true == true ? SignUpPage() : WelcomePage(),
       )
     )
   ));
@@ -160,7 +163,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     decoration: TextDecoration.underline,
                   )),
                 onTap: () => {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => new Scaffold(
                         body: Padding(
@@ -200,8 +203,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    StorageUtil.putString('username', 'treszt');
-
     return SingleChildScrollView(
       child: Column(children: <Widget>[
         Form (
@@ -271,8 +272,9 @@ class _LoginPageState extends State<LoginPage> {
                               content: Text('Succesfully logged in.'),));
                             setState(() {
                               _autoValidate = true;
-                              StorageUtil.putString('username', _user);
                             });
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                            prefs.setString('username', '$_user');
                           } else {
                             Scaffold.of(context)
                                 .showSnackBar(SnackBar(
@@ -308,13 +310,36 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: TextDecoration.underline,
                     )),
                 onTap: () => {
-                  Navigator.pop(context)
+                  Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => new Scaffold(
+                        body: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: SignUpPage()
+                        )
+                    )
+                    ),
+                  )
                 }
             ),
-            Text(StorageUtil.getString('username')),
           ],
         ),
       ],),
+    );
+  }
+}
+
+class WelcomePage extends StatefulWidget {
+  @override
+  _WelcomePageState createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text('Welcome'),
+      ),
     );
   }
 }
