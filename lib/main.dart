@@ -5,16 +5,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  //SharedPreferences prefs = await SharedPreferences.getInstance();
- // var user = prefs.getString('username') ?? false;
- // print(user);
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: true == true ? SignUpPage() : WelcomePage(),
+        child: SignUpPage(),
       )
     )
   ));
@@ -275,6 +271,15 @@ class _LoginPageState extends State<LoginPage> {
                             });
                             SharedPreferences prefs = await SharedPreferences.getInstance();
                             prefs.setString('username', '$_user');
+                            Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) => new Scaffold(
+                                  body: Padding(
+                                      padding: const EdgeInsets.all(20),
+                                      child: WelcomePage()
+                                  )
+                              )
+                              ),
+                            );
                           } else {
                             Scaffold.of(context)
                                 .showSnackBar(SnackBar(
@@ -330,16 +335,56 @@ class _LoginPageState extends State<LoginPage> {
 
 class WelcomePage extends StatefulWidget {
   @override
-  _WelcomePageState createState() => _WelcomePageState();
+  State<StatefulWidget> createState() {
+    return _WelcomePageState();
+  }
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  String _username;
+
   @override
   Widget build(BuildContext context) {
+    _updateUsername();
     return Scaffold(
       body: Center(
-        child: Text('Welcome'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Welcome $_username !'),
+            RaisedButton(
+              child: Text('Logout'),
+              onPressed: () async => {
+                _logout(),
+                Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => new Scaffold(
+                      body: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: SignUpPage()
+                      )
+                  )
+                  ),
+                )
+              }
+            ),
+          ],
+        )
       ),
     );
+  }
+
+  void _updateUsername() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _username = prefs.getString('username');
+    });
+  }
+
+  void _logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _username = '';
+      prefs.clear();
+    });
   }
 }
