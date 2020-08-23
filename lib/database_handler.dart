@@ -3,13 +3,15 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class User {
+  final int id;
   final String username;
   final String password;
 
-  User(this.username, this.password);
+  User(this.id, this.username, this.password);
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'username': username,
       'password': password,
     };
@@ -24,7 +26,10 @@ final Future<Database> database = getDatabasesPath().then((String path) {
     join(path, _databaseName),
     onCreate: (db, version) {
       return db.execute(
-        "CREATE TABLE users(username TEXT PRIMARY KEY NOT NULL, password TEXT)",
+        "CREATE TABLE users("
+            "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            "username TEXT NOT NULL,"
+            " password TEXT NOT NULL)",
       );
     },
     version: 1,
@@ -42,7 +47,7 @@ Future<void> insertUser(User user) async {
   );
 }
 
-Future<void> updateUser(User user) async {
+Future<void> updateUser(User user, String newUsername) async {
   final db = await database;
 
   await db.update(
@@ -70,6 +75,7 @@ Future<List<User>> users() async {
 
   return List.generate(maps.length, (i) {
     return User(
+      maps[i]['id'],
       maps[i]['username'],
       maps[i]['password'],
     );

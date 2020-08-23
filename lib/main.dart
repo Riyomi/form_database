@@ -10,7 +10,7 @@ Future<void> main() async {
     home: Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: SignUpPage(),
+        child: LoginPage(),
       )
     )
   ));
@@ -111,7 +111,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       if (_formKey.currentState.validate()) {
                         print('$_user:$_password:$_passwordRepeat');
                         try {
-                          await insertUser(new User(_user, _password));
+                          await insertUser(new User(null, _user, _password));
                           Scaffold.of(context)
                               .showSnackBar(SnackBar(
                             backgroundColor: Colors.green,
@@ -341,7 +341,10 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  String _username;
+  final _formKey = GlobalKey<FormState>();
+
+  var _username;
+  //  var _newUsername;
 
   @override
   Widget build(BuildContext context) {
@@ -351,7 +354,13 @@ class _WelcomePageState extends State<WelcomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Welcome $_username !'),
+            Text('Welcome $_username !',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.grey
+              )
+            ),
             RaisedButton(
               child: Text('Logout'),
               onPressed: () async => {
@@ -360,12 +369,57 @@ class _WelcomePageState extends State<WelcomePage> {
                   MaterialPageRoute(builder: (context) => new Scaffold(
                       body: Padding(
                           padding: const EdgeInsets.all(20),
-                          child: SignUpPage()
+                          child: LoginPage()
                       )
                   )
                   ),
                 )
               }
+            ),
+            Form(
+           // autovalidate: true,
+              key: _formKey,
+              child: Column(
+                children: [
+                 /* Text('Change username',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.grey
+                        )
+                  ),*/
+                  TextFormField(
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Username'
+                    ),
+                    validator: (value) {
+                      if(value.isEmpty) {
+                        return 'Please enter a new username';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FlatButton(
+                        color: Colors.blue,
+                        child: Text('Change username', style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        )),
+                        onPressed: () async {
+                          //todo: implement form submit function
+
+                          if (_formKey.currentState.validate()) {
+                         //   updateUser(new User ('$_newUsername', ''));
+                          }
+
+                        }
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         )
