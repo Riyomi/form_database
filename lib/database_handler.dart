@@ -29,7 +29,7 @@ final Future<Database> database = getDatabasesPath().then((String path) {
         "CREATE TABLE users("
             "id INTEGER PRIMARY KEY AUTOINCREMENT,"
             "username TEXT NOT NULL,"
-            " password TEXT NOT NULL)",
+            "password TEXT NOT NULL)",
       );
     },
     version: 1,
@@ -82,7 +82,7 @@ Future<List<User>> users() async {
   });
 }
 
-Future<bool> getUser(String username, String password) async {
+Future<bool> doUserAndPasswordMatch(String username, String password) async {
   final db = await database;
 
   var res = await db.query('users',
@@ -91,6 +91,27 @@ Future<bool> getUser(String username, String password) async {
   );
 
   return res.isNotEmpty ? true : false ;
-
 }
 
+Future<bool> getUserByUsername(String username) async {
+  final db = await database;
+
+  var res = await db.query('users',
+    columns: ["id", "username", "password"],
+    where: "username = ?",
+    whereArgs: [username],
+  );
+
+  return res.isNotEmpty ? true : false;
+}
+
+Future<bool> updateUserName(String username, String newUserName) async {
+  final db = await database;
+  
+  var res = await db.rawUpdate('UPDATE users SET username = ? WHERE username = ?', [newUserName, username]);
+
+  if (res > 0) {
+    return true;
+  }
+  return false;
+}

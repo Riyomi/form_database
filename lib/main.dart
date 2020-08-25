@@ -260,7 +260,7 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           print('$_user:$_password');
-                          bool found = await getUser('$_user', '$_password');
+                          bool found = await doUserAndPasswordMatch('$_user', '$_password');
                           if (found) {
                             Scaffold.of(context)
                                 .showSnackBar(SnackBar(
@@ -343,8 +343,8 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   final _formKey = GlobalKey<FormState>();
 
-  var _username;
-  //  var _newUsername;
+  String _username;
+  String _newUsername;
 
   @override
   Widget build(BuildContext context) {
@@ -377,17 +377,9 @@ class _WelcomePageState extends State<WelcomePage> {
               }
             ),
             Form(
-           // autovalidate: true,
               key: _formKey,
               child: Column(
                 children: [
-                 /* Text('Change username',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.grey
-                        )
-                  ),*/
                   TextFormField(
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -399,6 +391,9 @@ class _WelcomePageState extends State<WelcomePage> {
                       }
                       return null;
                     },
+                    onChanged: (value) {
+                      _newUsername = value;
+                    },
                   ),
                   SizedBox(
                     width: double.infinity,
@@ -409,12 +404,17 @@ class _WelcomePageState extends State<WelcomePage> {
                           fontWeight: FontWeight.bold,
                         )),
                         onPressed: () async {
-                          //todo: implement form submit function
-
+                          print(_newUsername);
                           if (_formKey.currentState.validate()) {
-                         //   updateUser(new User ('$_newUsername', ''));
+                              //await updateUser(new User(null, '$_username', null), '$_newUsername');
+                              bool successful = await updateUserName('$_username', '$_newUsername');
+                              if(successful) {
+                                Scaffold.of(context)
+                                    .showSnackBar(SnackBar(
+                                  backgroundColor: Colors.green,
+                                  content: Text('Username changed from $_username to $_newUsername'),));
+                              }
                           }
-
                         }
                     ),
                   ),
