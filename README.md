@@ -1,3 +1,3 @@
-# db_practice
+# Login & Signup
 
-A simple Flutter app that demonstrates how to get user input from a form and then save it in a database.
+A simple Flutter app where users can signup, login and then change their username.
